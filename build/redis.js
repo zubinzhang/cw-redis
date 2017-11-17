@@ -3,7 +3,6 @@
  * Created by Zubin on 2017-11-03 12:00:10
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = require("tslib");
 const Redis = require("ioredis");
 /**
  * redis操作类
@@ -63,20 +62,18 @@ class RedisHelper extends Redis {
      * @returns
      * @memberof RedisHelper
      */
-    getJsonData(key) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            let data = null;
-            try {
-                data = yield this.get(key);
-                data = JSON.parse(data);
-            }
-            catch (error) {
-                console.error(`获取缓存错误：${error}`);
-                // 非必要信息，获取异常忽略就好
-                data = null;
-            }
-            return data;
-        });
+    async getJsonData(key) {
+        let data = null;
+        try {
+            data = await this.get(key);
+            data = JSON.parse(data);
+        }
+        catch (error) {
+            console.error(`获取缓存错误：${error}`);
+            // 非必要信息，获取异常忽略就好
+            data = null;
+        }
+        return data;
     }
     /**
      * 设置指定 key 的值
@@ -92,4 +89,4 @@ class RedisHelper extends Redis {
     }
 }
 exports.default = RedisHelper;
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=redis.js.map
