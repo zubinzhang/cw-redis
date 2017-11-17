@@ -1,0 +1,31 @@
+# redis组件
+cw-redis是基于ioredis封装的redis组件,推荐node版本8LTS以上
+
+## 安装
+``` shell
+npm install --save cw-redis
+```
+## 使用方法
+```javascript
+var Redis = require('ioredis');
+var redis = new Redis();
+
+redis.set('foo', 'bar');
+redis.get('foo', function (err, result) {
+  console.log(result);
+});
+
+// Or using a promise if the last argument isn't a function
+redis.get('foo').then(function (result) {
+  console.log(result);
+});
+
+// Arguments to commands are flattened, so the following are the same:
+redis.sadd('set', 1, 3, 5, 7);
+redis.sadd('set', [1, 3, 5, 7]);
+
+// All arguments are passed directly to the redis server:
+redis.set('key', 100, 'EX', 10);
+```
+
+See the `examples/` folder for more examples.

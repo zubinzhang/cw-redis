@@ -15,7 +15,7 @@
     "ioredis"
   ],
   "author": "Zubin",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "ioredis": "^3.2.1"
   },
