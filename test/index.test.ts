@@ -12,7 +12,7 @@ describe('redis test', () => {
       lazyConnect: false,
       keyPrefix: '',
     });
-    await redis.set('test', 'hello', 'EX', 60);
+    await redis.setData('test', 'hello', 60);
     const data = await redis.get('test');
     expect(data).to.eq('hello');
   });

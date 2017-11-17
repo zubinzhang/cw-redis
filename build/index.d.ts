@@ -19,5 +19,15 @@ declare class RedisHelper extends Redis {
      * @memberof RedisHelper
      */
     getJsonData(key: string): Promise<any>;
+    /**
+     * 设置指定 key 的值
+     *
+     * @param {string} key
+     * @param {string} value
+     * @param {number} expire 过期时间[s]
+     * @returns
+     * @memberof RedisHelper
+     */
+    setData(key: string, value: string, expire: number): any;
 }
 export default RedisHelper;

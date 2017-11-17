@@ -75,6 +75,18 @@ class RedisHelper extends Redis {
         }
         return data;
     }
+    /**
+     * 设置指定 key 的值
+     *
+     * @param {string} key
+     * @param {string} value
+     * @param {number} expire 过期时间[s]
+     * @returns
+     * @memberof RedisHelper
+     */
+    setData(key, value, expire) {
+        return super.set(key, value, 'EX', expire);
+    }
 }
 exports.default = RedisHelper;
 //# sourceMappingURL=index.js.map
