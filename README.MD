@@ -8,7 +8,7 @@ npm install --save cw-redis
 ## 使用方法
 ```javascript
 var Redis = require('cw-redis');
-var redis = new Redis({});
+var redis = Redis.init({});
 
 redis.set('foo', 'bar');
 redis.get('foo', function (err, result) {
