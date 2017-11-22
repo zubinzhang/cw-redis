@@ -16,6 +16,7 @@
   "author": "Zubin",
   "license": "MIT",
   "dependencies": {
+    "@types/ioredis": "^3.2.1",
     "ioredis": "^3.2.1"
   },
   "devDependencies": {
