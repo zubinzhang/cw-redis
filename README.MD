@@ -10,25 +10,23 @@ npm install --save cw-redis
 var Redis = require('cw-redis');
 var redis = Redis.init({});
 
-redis.set('foo', 'bar');
-redis.get('foo', function (err, result) {
+redis.set('key', 'value');
+redis.get('key', function (err, result) {
   console.log(result);
 });
 
-// Or using a promise if the last argument isn't a function
-redis.get('foo').then(function (result) {
+redis.get('key').then(function (result) {
   console.log(result);
 });
 
-// Arguments to commands are flattened, so the following are the same:
-redis.sadd('set', 1, 3, 5, 7);
-redis.sadd('set', [1, 3, 5, 7]);
-
-// All arguments are passed directly to the redis server:
 redis.set('key', 100, 'EX', 10);
 
 await redis.setData('test', 'hello', 60);
 const data = await redis.get('test');
+
+
+redis.sadd('set', 1, 3, 5, 7);
+redis.sadd('set', [1, 3, 5, 7]);
 ```
 
-详情请参考[ioredis](https://github.com/luin/ioredis)
+详情请参考[ioredis](https://github.com/luin/ioredis),[redis官网](RedisHelper)

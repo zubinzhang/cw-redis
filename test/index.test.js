@@ -1,5 +1,5 @@
-import Redis from '../src';
-import { expect } from 'chai';
+const Redis = require('../index');
+const { expect } = require('chai');
 
 describe('redis test', () => {
   it('set:', async () => {
