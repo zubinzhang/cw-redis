@@ -29,4 +29,4 @@ redis.sadd('set', 1, 3, 5, 7);
 redis.sadd('set', [1, 3, 5, 7]);
 ```
 
-详情请参考[ioredis](https://github.com/luin/ioredis),[redis官网](RedisHelper)
+详情请参考[ioredis](https://github.com/luin/ioredis) ,[redis官网](https://redis.io)
