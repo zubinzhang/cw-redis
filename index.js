@@ -65,6 +65,7 @@ class RedisHelper extends Redis {
 
   constructor(options) {
     super(options);
+    this.config = options;
   }
 
   /**
@@ -98,6 +99,34 @@ class RedisHelper extends Redis {
    */
   setData(key, value, expire) {
     return super.set(key, value, 'EX', expire);
+  }
+
+  /**
+   * 删除符合条件的key
+   * eg：deleteKey('a')  deleteKey('*a*')
+   *
+   * @param {any} keyStr
+   * @memberof RedisHelper
+   */
+  async deleteKey(keyStr) {
+
+    // 查询符合所有条件的所有key
+    let [cursor, matchKeys] = await super.scan(0, 'COUNT', '200', 'MATCH', keyStr);
+    let rows = 0;
+
+    while (cursor.toString() !== '0') {
+      const r = await super.scan(cursor, 'COUNT', '200', 'MATCH', keyStr);
+      cursor = r[0];
+      matchKeys = [...matchKeys, ...r[1]];
+    }
+
+    // 如果有前缀，删除前缀
+    if (this.config.keyPrefix) matchKeys = matchKeys.map(item => item.replace(this.config.keyPrefix, ''));
+    if (matchKeys.length > 0) {
+      rows = await super.del(...matchKeys);
+    }
+
+    return { rows, keys: matchKeys };
   }
 }
 

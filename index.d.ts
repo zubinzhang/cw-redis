@@ -3,6 +3,12 @@ import * as Redis from 'ioredis';
 
 import { RedisOptions } from 'ioredis';
 
+interface IDeleteResult {
+  [x: string]: any;
+  rows: number;
+  keys: string[];
+}
+
 /**
  * redis操作类
  */
@@ -31,6 +37,15 @@ declare class RedisHelper extends Redis {
    * @memberof RedisHelper
    */
   setData(key: string, value: string, expire: number): any;
+
+  /**
+ * 删除符合条件的key
+ * eg：deleteKey('a')  deleteKey('*a*')
+ *
+ * @param {string} keyStr
+ * @memberof RedisHelper
+ */
+  async deleteKey(keyStr: string): IDeleteResult;
 }
 export = RedisHelper;
 
