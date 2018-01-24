@@ -39,13 +39,13 @@ declare class RedisHelper extends Redis {
   setData(key: string, value: string, expire: number): any;
 
   /**
- * 删除符合条件的key
- * eg：deleteKey('a')  deleteKey('*a*')
- *
- * @param {string} keyStr
- * @memberof RedisHelper
- */
-  async deleteKey(keyStr: string): IDeleteResult;
+   * 删除符合条件的key
+   * eg：deleteKey('a')  deleteKey('*a*')
+   *
+   * @param {string} keyStr
+   * @memberof RedisHelper
+   */
+  deleteKey(keyStr: string): Promise<IDeleteResult>;
 }
 export = RedisHelper;
 
