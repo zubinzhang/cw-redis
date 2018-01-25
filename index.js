@@ -13,8 +13,7 @@ class RedisHelper extends Redis {
    * 初始化redis
    */
   static init(config) {
-
-    if (!RedisHelper.db) {
+    if (!RedisHelper[`db${config.db || ''}`]) {
       let server;
       config.retryStrategy = (times) => {
         if (times <= 5) {
@@ -57,9 +56,9 @@ class RedisHelper extends Redis {
         console.info('redis连接已经释放');
       });
 
-      RedisHelper.db = server;
+      RedisHelper[`db${config.db || ''}`] = server;
     }
-    return RedisHelper.db;
+    return RedisHelper[`db${config.db || ''}`];
   }
 
 
