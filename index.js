@@ -8,59 +8,18 @@ const Redis = require('ioredis');
  * redis操作类
  */
 class RedisHelper extends Redis {
-
   /**
    * 初始化redis
    */
   static init(config) {
-    if (!RedisHelper[`db${config.db || ''}`]) {
-      let server;
-      config.retryStrategy = (times) => {
-        if (times <= 5) {
-          console.info(`重连次数${times}`);
-          return times;
-        }
-        if (!server) return 0;
-        server.disconnect();
-        console.info('redis将在10分钟之后重新尝试建立连接');
-        setTimeout(() => {
-          console.info('redis正在尝试重新建立连接');
-          server = new RedisHelper(config);
-        }, 1000 * 60 * 10);
+    const instance = `${config.host}#db${config.db}`;
+    if (!RedisHelper[instance]) {
+      const server = new RedisHelper(config);
 
-        return 240;
-      };
-
-      server = new RedisHelper(config);
-      server.on('connect', () => {
-        console.info('redis正在连接中...');
-      });
-
-      server.on('error', (err) => {
-        console.error(`redis连接错误[error]:${err.toString()}`);
-      });
-
-      server.on('ready', () => {
-        console.info('redis连接已就绪...');
-      });
-
-      server.on('close', () => {
-        console.info('redis连接已关闭...');
-      });
-
-      server.on('reconnecting', () => {
-        console.info('redis正在尝试重连...');
-      });
-
-      server.on('end', () => {
-        console.info('redis连接已经释放');
-      });
-
-      RedisHelper[`db${config.db || ''}`] = server;
+      RedisHelper[instance] = server;
     }
-    return RedisHelper[`db${config.db || ''}`];
+    return RedisHelper[instance];
   }
-
 
   constructor(options) {
     super(options);
@@ -80,7 +39,6 @@ class RedisHelper extends Redis {
       data = await this.get(key);
       data = JSON.parse(data);
     } catch (error) {
-      console.error(`获取缓存错误：${error}`);
       // 非必要信息，获取异常忽略就好
       data = null;
     }
@@ -108,19 +66,24 @@ class RedisHelper extends Redis {
    * @memberof RedisHelper
    */
   async deleteKey(keyStr) {
-
     // 查询符合所有条件的所有key
     let [cursor, matchKeys] = await super.scan(0, 'COUNT', '200', 'MATCH', keyStr);
     let rows = 0;
 
     while (cursor.toString() !== '0') {
+      // eslint-disable-next-line no-await-in-loop
       const r = await super.scan(cursor, 'COUNT', '200', 'MATCH', keyStr);
+
+      // eslint-disable-next-line prefer-destructuring
       cursor = r[0];
       matchKeys = [...matchKeys, ...r[1]];
     }
 
     // 如果有前缀，删除前缀
-    if (this.config.keyPrefix) matchKeys = matchKeys.map(item => item.replace(this.config.keyPrefix, ''));
+    if (this.config.keyPrefix) {
+      matchKeys = matchKeys.map(item => item.replace(this.config.keyPrefix, ''));
+    }
+
     if (matchKeys.length > 0) {
       rows = await super.del(...matchKeys);
     }
@@ -129,4 +92,4 @@ class RedisHelper extends Redis {
   }
 }
 
-exports = module.exports = RedisHelper;
+module.exports = RedisHelper;
