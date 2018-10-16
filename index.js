@@ -67,12 +67,12 @@ class RedisHelper extends Redis {
    */
   async deleteKey(keyStr) {
     // 查询符合所有条件的所有key
-    let [cursor, matchKeys] = await super.scan(0, 'COUNT', '200', 'MATCH', keyStr);
+    let [cursor, matchKeys] = await super.scan(0, 'MATCH', keyStr);
     let rows = 0;
 
     while (cursor.toString() !== '0') {
       // eslint-disable-next-line no-await-in-loop
-      const r = await super.scan(cursor, 'COUNT', '200', 'MATCH', keyStr);
+      const r = await super.scan(cursor, 'MATCH', keyStr);
 
       // eslint-disable-next-line prefer-destructuring
       cursor = r[0];
